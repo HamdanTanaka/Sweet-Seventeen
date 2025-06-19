@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sweet Seventeen Surprise 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('gojo-nanami-bg.jpg') center/cover no-repeat fixed;
+      overflow-x: hidden;
+      color: white;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+
+    .message-container {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+      margin: 20vh auto 0 auto;
+      text-align: center;
+      font-size: 2em;
+      padding: 0 20px;
+      display: none;
+    }
+
+    #typewriter {
+      white-space: pre-wrap;
+      overflow: hidden;
+      border-right: 3px solid white;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: white; }
+      50% { border-color: transparent; }
+    }
+
+    .levi {
+      display: none;
+      width: 220px;
+      margin: 30px auto 0 auto;
+      animation: popIn 1s ease forwards;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.7);
+      background: rgba(0,0,0,0.3);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .heart {
+      position: fixed;
+      color: hotpink;
+      font-size: 24px;
+      animation: floatHeart 3s ease-out forwards;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9999;
+      text-shadow: 0 0 5px #fff, 0 0 10px pink;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: scale(0.8) translateY(0);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.2) translateY(-40px);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.5) translateY(-100px);
+        opacity: 0;
+      }
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      font-size: 0.85em;
+      z-index: 2;
+    }
+
+    .music-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 3;
+      background: rgba(255,255,255,0.9);
+      color: #000;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+
+    .confetti {
+      position: fixed;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: fall linear forwards;
+      z-index: 9999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background: pink;
+      border-radius: 50%;
+      animation: rise 6s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rise {
+      from { bottom: -100px; }
+      to { bottom: 100vh; }
+    }
+
+    #intro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.95);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .tap-text {
+      margin-top: 20px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+
+    .flower-message {
+      display: none;
+      font-size: 1em;
+      margin-top: 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .gift-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      background: #ffc107;
+      color: black;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="intro">
+    Maaf kurang effort ya 😅
+    <div class="tap-text">(Tap di mana saja untuk mulai)</div>
+  </div>
+
+  <audio id="bgMusic" src="music.mp3" loop></audio>
+  <button class="music-button" id="musicButton">🔇</button>
+
+  <div class="overlay"></div>
+
+  <div class="message-container" id="message">
+    <div id="typewriter"></div>
+    <img src="levi-cake.png" alt="Levi" class="levi" id="leviImg" />
+    <button class="gift-button" onclick="showFlower()">🌸 Buka Bunga</button>
+    <div class="flower-message" id="flowerMsg">Semoga harimu berbunga-bunga 🌼</div>
+  </div>
+
+  <footer>&copy; 2025 by M.Hamdan Alawi</footer>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const musicButton = document.getElementById('musicButton');
+    const intro = document.getElementById('intro');
+    const messageBox = document.getElementById('message');
+    const typewriter = document.getElementById('typewriter');
+    const leviImg = document.getElementById('leviImg');
+
+    let musicStarted = false;
+
+    const teks = "🎀 Happy Sweet 17th 🎉\nKeisya Nurrizkia Hermina 💖\nSemoga bahagia & sukses selalu! 🌸";
+
+    document.body.addEventListener('click', () => {
+      if (!musicStarted) {
+        music.play().then(() => {
+          musicStarted = true;
+          music.muted = false;
+          musicButton.innerText = '🔊';
+        }).catch(() => {});
+      }
+
+      intro.style.display = "none";
+      messageBox.style.display = "block";
+      typeText(teks);
+      spawnConfetti(80);
+      spawnBalloons(15);
+    }, { once: true });
+
+    musicButton.addEventListener('click', () => {
+      if (!musicStarted) {
+        music.play();
+        musicStarted = true;
+        music.muted = false;
+        musicButton.innerText = '🔊';
+      } else {
+        music.muted = !music.muted;
+        musicButton.innerText = music.muted ? '🔇' : '🔊';
+      }
+    });
+
+    function typeText(text) {
+      let i = 0;
+      const speed = 50;
+      function typing() {
+        if (i < text.length) {
+          typewriter.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        } else {
+          leviImg.style.display = "block";
+        }
+      }
+      typing();
+    }
+
+    function showFlower() {
+      document.getElementById('flowerMsg').style.display = 'block';
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerText = '💖';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = (60 + Math.random() * 20) + 'vh';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
+      }
+    }
+
+    function spawnConfetti(count) {
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        confetti.style.animationDuration = 2 + Math.random() * 3 + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+
+    function spawnBalloons(count) {
+      for (let i = 0; i < count; i++) {
+        const balloon = document.createElement('div');
+        balloon.className = 'balloon';
+        balloon.style.left = Math.random() * 100 + 'vw';
+        balloon.style.background = `hsl(${Math.random() * 360}, 80%, 70%)`;
+        balloon.style.bottom = '-80px';
+        balloon.style.animationDelay = Math.random() * 5 + 's';
+        document.body.appendChild(balloon);
+        setTimeout(() => balloon.remove(), 8000);
+      }
+    }
+  </script>
+
+</body>
+</html>
